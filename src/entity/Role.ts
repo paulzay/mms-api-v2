@@ -3,9 +3,6 @@ import { User } from './User';
 
 @Entity()
 export class Role {
-  static create(arg0: { name: string; }) {
-    throw new Error('Method not implemented.');
-  }
   @PrimaryGeneratedColumn()
   id: number;
 
