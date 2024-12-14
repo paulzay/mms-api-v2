@@ -3,7 +3,7 @@ import { User } from "../entity/User";
 import { Role } from "../entity/Role";
 import bcrypt from "bcrypt";
 
-export class UserRepository {
+class UserRepository {
   private repository = AppDataSource.getRepository(User);
 
   async create(userData: Partial<User>): Promise<User> {
@@ -31,6 +31,10 @@ export class UserRepository {
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     return isPasswordMatch ? user : null;
+  }
+
+  async findAll(): Promise<User[]> {
+    return this.repository.find();
   }
 
   async findByEmail(email: string): Promise<User | null> {

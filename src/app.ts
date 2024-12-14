@@ -1,12 +1,16 @@
 import express = require('express');
 import userRoutes from './routes/userRoutes';
+import activityRoutes from './routes/activityRoutes';
 import cors = require('cors');
 import morgan = require('morgan');
 import { AppDataSource } from "./data-source"
 import { Role } from './entity/Role';
+import { User } from './entity/User';
 
 AppDataSource.initialize().then(async () => {
+  const userRepository = AppDataSource.getRepository(User);
   const roleRepository = AppDataSource.getRepository(Role);
+
   const roles = await roleRepository.find();
 
   if (roles.length === 0) {
@@ -31,5 +35,6 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('/users', userRoutes);
+app.use('/activities', activityRoutes);
 
 module.exports = app;

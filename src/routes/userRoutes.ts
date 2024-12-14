@@ -114,4 +114,14 @@ router.get('/:id', async (req, res:any) => {
   }
 });
 
+router.get('/', async (req, res:any) => {
+  try {
+    const users = await userRepository.findAll();
+    res.json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error retrieving users' });
+  }
+});
+
 export default router;
