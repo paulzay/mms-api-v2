@@ -3,6 +3,8 @@ import jwt = require('jsonwebtoken');
 import { userRepository } from "../repositories/UserRepository";
 import multer =  require("multer");
 import path = require("path");
+import { AppDataSource } from "../data-source";
+import { Role } from "../entity/Role";
 
 const router = express.Router();
 const upload = multer({
@@ -60,12 +62,13 @@ router.post('/login', async (req, res:any) => {
     if (!user) {
       return res.status(400).json({ error: 'Invalid credentials' });
     }
-
     const accessToken = jwt.sign({ id: user.id, username: user.username }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
 
-    res.status(200).json({ accessToken, user: { username: user.username, email: user.email, id: user.id, avatar: user.avatar } });
+    const userRole = await AppDataSource.getRepository(Role).findOneBy({id: user.role.id});
+
+    res.status(200).json({ accessToken, user: { username: user.username, email: user.email, id: user.id, avatar: user.avatar, role: userRole } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Server error during login' });

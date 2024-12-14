@@ -13,10 +13,13 @@ class UserRepository {
       userData.password = await bcrypt.hash(userData.password, salt);
     }
 
-    // Assign default role
-    const role = await AppDataSource.getRepository(Role).findOne({ where: { name: "user" } });
-    if (role) {
+    const userRole = userData.role;
+
+    if (userRole) {
+      const role = await AppDataSource.getRepository(Role).findOne({ where: { name: userRole.name } });
+      if (role) {
       userData.role = role;
+      }
     }
 
     const user = this.repository.create(userData);
