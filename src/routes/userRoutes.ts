@@ -66,7 +66,7 @@ router.post('/login', async (req, res:any) => {
       expiresIn: '1h',
     });
 
-    const userRole = await AppDataSource.getRepository(Role).findOneBy({id: user.role.id});
+    const userRole = await AppDataSource.getRepository(Role).findOneBy({users: user.role});
 
     res.status(200).json({ accessToken, user: { username: user.username, email: user.email, id: user.id, avatar: user.avatar, role: userRole } });
   } catch (error) {
